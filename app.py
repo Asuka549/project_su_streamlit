@@ -1,93 +1,34 @@
 import streamlit as st
-# 會旋轉的寫輪眼
-# 寫輪眼模組
-import streamlit as st
-import turtle
-from sharingan import draw_sharingan
-
-def draw_sharingan(t1, x, y, a, b, m, p):
-    # 眼球
-    t1.penup()
-    t1.goto(x, y-300)
-    t1.pendown()
-    t1.color(a)
-    t1.begin_fill()
-    t1.circle(300)
-    t1.end_fill()
-
-    # 瞳仁
-    t1.penup()
-    t1.goto(x, y-40)
-    t1.pendown()
-    t1.color(b)
-    t1.begin_fill()
-    t1.circle(40)
-    t1.end_fill()
-
-    # 勾玉
-    for n in range(3):
-        t1.penup()
-        t1.goto(x, y-200/p)
-        t1.seth(0)
-        t1.circle(200/p, m)
-        t1.pendown()
-
-        t1.color(b)
-        t1.circle(200/p, 60 + n * 120)
-
-        t1.lt(195)
-
-        t1.color(b)
-        t1.begin_fill()
-        t1.circle(40/p, 360 / 2)
-        t1.end_fill()
-        t1.lt(180)
-        t1.color(a)
-        t1.begin_fill()
-        t1.circle(-20/p, 360 / 2)
-        t1.end_fill()
-        t1.color(b)
-        t1.begin_fill()
-        t1.circle(20/p, 360 / 2)
-        t1.end_fill()
-
-    # 內圈
-    t1.penup()
-    t1.goto(x, y-200/p)
-    t1.seth(0)
-    t1.pendown()
-    t1.color(b)
-    t1.circle(200/p)
-
-    return None
-
-# 頁面標題（可選）
-st.set_page_config(page_title="Dockerized Streamlit")
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
 # 顯示 JSON 格式的訊息
 data = {"message": "Hello, Dockerized Flask!"}
 st.json(data)
 
-# 寫輪眼動畫
-turtle.colormode(255)
-t1 = turtle.Turtle()
-t1.hideturtle()
-t1.speed(0)
-screen = turtle.Screen()
-screen.bgcolor('black')
-screen.tracer(0)
+st.set_page_config(page_title="Dockerized Streamlit")
 
-a = 'red'
-b = 'black'
-x = 0
-y = 0
-m = 0
-dm = 10
+IMG_TEST = [  #林肯圖像
+[157,153,174,168,150,152,129,151,172,161,156,156],
+[155,182,163, 74, 76, 62, 33, 17,110,210,180,154],
+[180,180, 50, 14, 34,  6, 10, 33, 48,106,150,181],
+[206,109,  5,124,131,111,120,204,166, 15, 56,180],
+[194, 64,137,251,237,239,210,220,227, 87, 71,201],
+[172,106,207,233,233,214,220,239,228, 98, 74,206],
+[198, 84,179,209,116,215,211,158,119, 75, 10,169],
+[199, 97,166, 84, 10,168,134, 11, 31, 62, 22,148],
+[199,168,191,193,158,227,178,143,182,106, 36,190],
+[206,174,156,252,216,231,140,178,228, 43, 96,234],
+[190,216,116,149,236,187, 86,150, 79, 38,218,241],
+[190,224,147,100,227,210,127,102, 36,101,255,224],
+[190,214,173, 66,103,143, 96, 50,  2,109,249,215],
+[187,196,236, 75,  1, 81, 47,  0,  6,217,255,211],
+[183,202,237,145,  0,  0, 12,108,200,138,243,236],
+[196,206,123,207,177,121,123,200,176, 13, 96,218] ]
 
-while True:
-    t1.clear()
-    m += dm
-    draw_sharingan(t1, x, y, a, b, m, p=None)
-    screen.update()
+df = pd.DataFrame(IMG_TEST)
+np_2D = np.array(IMG_TEST)
 
-turtle.mainloop()
+plt.imshow(np_2D, cmap='gray')
+plt.show()
