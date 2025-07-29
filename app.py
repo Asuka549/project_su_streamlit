@@ -30,5 +30,8 @@ IMG_TEST = [  #林肯圖像
 df = pd.DataFrame(IMG_TEST)
 np_2D = np.array(IMG_TEST)
 
-plt.imshow(np_2D, cmap='gray')
-plt.show()
+fig, ax = plt.subplots()
+ax.imshow(np_2D, cmap="gray")
+ax.axis("off")           # 不顯示坐標軸（可选）
+
+st.pyplot(fig)
