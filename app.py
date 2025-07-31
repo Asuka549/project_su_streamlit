@@ -44,26 +44,26 @@ st.set_page_config(
 )
 
 # 2. 主标题与简介
-st.title("🔴 旋转写轮眼（灰度图）演示")
+st.title("🔴 林肯圖演示")
 st.markdown(
     """
     这个示例使用 **Streamlit** + **Matplotlib**  
-    展示林肯灰度照片，同时支持自定义色彩映射和数据显示。
+    展示林肯像素照片，同时支持自定义色彩映射和数据显示。
     """
 )
 
-# 3. 侧边栏：交互式控件
+# 3. 側欄：互動式元件
 with st.sidebar:
-    st.header("设置")
+    st.header("設定")
     colormap = st.selectbox(
-        "选择色彩映射 (colormap)", 
+        "選擇色彩映射 (colormap)", 
         ["gray", "viridis", "plasma", "inferno", "magma"]
     )
     show_df = st.checkbox("显示 DataFrame", value=False)
     st.markdown("---")
     st.write("© 2025 Asuka Liaw")
 
-# 4. 数据准备
+# 4. 數據準備
 IMG_TEST = [
     [157,153,174,168,150,152,129,151,172,161,156,156],
     [155,182,163, 74, 76, 62, 33, 17,110,210,180,154],
@@ -85,19 +85,19 @@ IMG_TEST = [
 np_2D = np.array(IMG_TEST)
 df = pd.DataFrame(IMG_TEST)
 
-# 5. 主页面双栏展示
+# 5. 主頁面雙欄顯示
 col1, col2 = st.columns([1, 2])
 
 with col1:
-    st.subheader("原始灰度图像")
+    st.subheader("原始黑白影像")
     st.image(
         np_2D, 
-        caption="原始数据", 
+        caption="原始資料", 
         use_column_width=True, 
         clamp=True
     )
     if show_df:
-        st.markdown("#### 原始数值 (DataFrame)")
+        st.markdown("#### 原始數值 (DataFrame)")
         st.dataframe(df, use_container_width=True)
 
 with col2:
