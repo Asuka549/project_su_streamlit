@@ -1,108 +1,42 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
+from PIL import Image
+import io
 
-# 顯示 JSON 格式的訊息
-data = {"message": "Hello, Dockerized Flask!"}
-st.json(data)
-
-st.set_page_config(page_title="Dockerized Streamlit")
-
-IMG_TEST = [  #林肯圖像
-[157,153,174,168,150,152,129,151,172,161,156,156],
-[155,182,163, 74, 76, 62, 33, 17,110,210,180,154],
-[180,180, 50, 14, 34,  6, 10, 33, 48,106,150,181],
-[206,109,  5,124,131,111,120,204,166, 15, 56,180],
-[194, 64,137,251,237,239,210,220,227, 87, 71,201],
-[172,106,207,233,233,214,220,239,228, 98, 74,206],
-[198, 84,179,209,116,215,211,158,119, 75, 10,169],
-[199, 97,166, 84, 10,168,134, 11, 31, 62, 22,148],
-[199,168,191,193,158,227,178,143,182,106, 36,190],
-[206,174,156,252,216,231,140,178,228, 43, 96,234],
-[190,216,116,149,236,187, 86,150, 79, 38,218,241],
-[190,224,147,100,227,210,127,102, 36,101,255,224],
-[190,214,173, 66,103,143, 96, 50,  2,109,249,215],
-[187,196,236, 75,  1, 81, 47,  0,  6,217,255,211],
-[183,202,237,145,  0,  0, 12,108,200,138,243,236],
-[196,206,123,207,177,121,123,200,176, 13, 96,218] ]
-
-df = pd.DataFrame(IMG_TEST)
-np_2D = np.array(IMG_TEST)
-
-fig, ax = plt.subplots()
-ax.imshow(np_2D, cmap="gray")
-ax.axis("off")           # 不顯示坐標軸（可选）
-
-st.pyplot(fig)
-
-# 1. 全局页面配置
+# 全域頁面設定
 st.set_page_config(
-    page_title="Sharingan Gray-Scale Demo",
-    page_icon="🌀",
-    layout="wide",
+    page_title="圖片灰階轉換器",
+    page_icon="🖤",
+    layout="centered"
 )
 
-# 2. 主标题与简介
-st.title("🔴 林肯圖演示")
-st.markdown(
-    """
-    这个示例使用 **Streamlit** + **Matplotlib**  
-    展示林肯像素照片，同时支持自定义色彩映射和数据显示。
-    """
+st.title("📷 圖片灰階轉換器")
+st.write("上傳一張照片，馬上轉成灰階並下載！")
+
+# 1. 上傳檔案
+uploaded_file = st.file_uploader(
+    "請上傳照片（JPG/PNG）", 
+    type=["jpg", "jpeg", "png"]
 )
 
-# 3. 側欄：互動式元件
-with st.sidebar:
-    st.header("設定")
-    colormap = st.selectbox(
-        "選擇色彩映射 (colormap)", 
-        ["gray", "viridis", "plasma", "inferno", "magma"]
+if uploaded_file:
+    # 2. 讀取並顯示原圖
+    image = Image.open(uploaded_file)
+    st.subheader("原始圖片")
+    st.image(image, use_column_width=True)
+
+    # 3. 轉成灰階並顯示
+    gray_image = image.convert("L")
+    st.subheader("灰階圖片")
+    st.image(gray_image, use_column_width=True)
+
+    # 4. 準備下載
+    buf = io.BytesIO()
+    gray_image.save(buf, format="PNG")
+    byte_data = buf.getvalue()
+
+    st.download_button(
+        label="⬇️ 下載灰階圖片",
+        data=byte_data,
+        file_name="gray_image.png",
+        mime="image/png"
     )
-    show_df = st.checkbox("显示 DataFrame", value=False)
-    st.markdown("---")
-    st.write("© 2025 Asuka Liaw")
-
-# 4. 數據準備
-IMG_TEST = [
-    [157,153,174,168,150,152,129,151,172,161,156,156],
-    [155,182,163, 74, 76, 62, 33, 17,110,210,180,154],
-    [180,180, 50, 14, 34,  6, 10, 33, 48,106,150,181],
-    [206,109,  5,124,131,111,120,204,166, 15, 56,180],
-    [194, 64,137,251,237,239,210,220,227, 87, 71,201],
-    [172,106,207,233,233,214,220,239,228, 98, 74,206],
-    [198, 84,179,209,116,215,211,158,119, 75, 10,169],
-    [199, 97,166, 84, 10,168,134, 11, 31, 62, 22,148],
-    [199,168,191,193,158,227,178,143,182,106, 36,190],
-    [206,174,156,252,216,231,140,178,228, 43, 96,234],
-    [190,216,116,149,236,187, 86,150, 79, 38,218,241],
-    [190,224,147,100,227,210,127,102, 36,101,255,224],
-    [190,214,173, 66,103,143, 96, 50,  2,109,249,215],
-    [187,196,236, 75,  1, 81, 47,  0,  6,217,255,211],
-    [183,202,237,145,  0,  0, 12,108,200,138,243,236],
-    [196,206,123,207,177,121,123,200,176, 13, 96,218],
-]
-np_2D = np.array(IMG_TEST)
-df = pd.DataFrame(IMG_TEST)
-
-# 5. 主頁面雙欄顯示
-col1, col2 = st.columns([1, 2])
-
-with col1:
-    st.subheader("原始黑白影像")
-    st.image(
-        np_2D, 
-        caption="原始資料", 
-        use_column_width=True, 
-        clamp=True
-    )
-    if show_df:
-        st.markdown("#### 原始數值 (DataFrame)")
-        st.dataframe(df, use_container_width=True)
-
-with col2:
-    st.subheader("Matplotlib 渲染")
-    fig, ax = plt.subplots(figsize=(5, 5))
-    ax.imshow(np_2D, cmap=colormap)
-    ax.axis("off")
-    st.pyplot(fig)
